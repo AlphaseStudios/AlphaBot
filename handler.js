@@ -1,117 +1,247 @@
-// Imports and definitions
 const fs = require('fs');
 const Discord = require('discord.js');
-const config = require('./config.json');
+const utils = require('./utils.js');
+const config = require('./resources/config.json');
 
-const client = new Discord.Client();
-client.commands = new Discord.Collection();
-
-// Find all commands
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-const _commandFiles = fs.readdirSync('./commands/other/').filter(file => file.endsWith('.js'));
-for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
-    client.commands.set(command.name, command);
-}
-for (const file of _commandFiles) {
-    const command = require(`./commands/other/${file}`);
-    client.commands.set(command.name, command);
-}
 const cooldowns = new Discord.Collection();
 
-// Events
-client.on('ready', () => {
-    console.log(`Successfully logged in as ${client.user.tag} at ${curTime()}`);
-});
-
-// CommandHandler
-client.on('message', message => {
-    // Init
-    if (!message.content.startsWith(config.prefix) || message.author.bot) return;
-    const args = message.content.slice(config.prefix.length).trim().split(/ +/);
-    const commandName = args.shift().toLowerCase();
-    const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-
-    // GuildOnly
-    if (!command) return;
-    if (command.guildOnly && message.channel.type === 'dm') {
-        var embed = new Discord.MessageEmbed()
-            .setColor('#fa3c3c')
-            .setTitle('Error')
-            .setDescription("I am unable to execute this command in DMs.")
-            .setTimestamp()
-            .setFooter(`Executed by ${message.author.username}`, message.author.avatarURL({ format: "png" }));
-        return message.channel.send(embed);
-    }
-
-    if (command.permissions) {
-        const authorPerms = message.channel.permissionsFor(message.author);
-        if (!authorPerms || !authorPerms.has(command.permissions)) {
-            return message.reply('You can not do this!');
+/* function handleCommand(client, message) {
+    // Init command
+    if (message.content.split(' ').length == 1) {
+        if (message.mentions.has(client.user)) {
+            message.channel.send("Hey!\nMy prefixes are: `a.` and `ab.`");
+            return;
         }
+    };
+
+    for (prefix of config.prefixes) {
+        if (message.content.toLowerCase().startsWith(prefix) || message.author.bot) handle();
     }
 
-    // Arguments
-    if (command.args) {
-        if (args.length != command.args) {
-            let reply = `You didn't provide any arguments, ${message.author}!`;
-            if (command.usage) reply += `\nThe proper usage would be: \`${config.prefix}${command.name} ${command.usage}\``;
+    function handle() {
+        const args = message.content.slice(prefix.length).trim().split(/ +/);
+        const commandName = args.shift().toLowerCase();
+        const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
+        // GuildOnly
+        if (!command) return;
+        if (command.guildOnly && message.channel.type === 'dm') {
             var embed = new Discord.MessageEmbed()
                 .setColor('#fa3c3c')
-                .setTitle("Error")
-                .setDescription(reply);
+                .setTitle('Error')
+                .setDescription("I am unable to execute this command in DMs.")
+                .setTimestamp()
+                .setFooter(`Executed by ${message.author.username}`, message.author.avatarURL({ format: "png" }));
             return message.channel.send(embed);
         }
+        // command perms
+        if (command.permissions) {
+            const authorPerms = message.channel.permissionsFor(message.author);
+            if (!authorPerms || !authorPerms.has(command.permissions)) {
+                return message.reply('You can not do this!');
+            }
+        }
+
+        // DevOnly
+        if (command.devOnly) {
+            if (utils.getDevs().includes(message.author.id)) {
+                var embed = new Discord.MessageEmbed()
+                    .setColor('#ff9900')
+                    .setTitle('Information')
+                    .setDescription("You are executing this command in devOnly mode. This means, the bot currently registers you as a Developer. If you think this is a mistake, please contact us [here](https://alphase/com/contact/)!")
+                    .setTimestamp()
+                    .setFooter(`Executed by ${message.author.username}`, message.author.avatarURL({ format: "png" }));
+                message.channel.send(embed);
+            } else return;
+        }
+
+        // Arguments
+        if (command.args) {
+            if (command.args != -1) {
+                if (args.length != command.args) {
+                    let reply = `You didn't provide any arguments, ${message.author}!`;
+                    if (command.usage) reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
+
+                    var embed = new Discord.MessageEmbed()
+                        .setColor('#fa3c3c')
+                        .setTitle("Error")
+                        .setDescription(reply);
+                    return message.channel.send(embed);
+                }
+            } else {
+                if (args.length == 0) { return message.channel.send(`You forgot to provide the \`${command.usage}\` argument.`) }
+            }
+        }
+
+        // Cooldown
+        if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Discord.Collection());
+        const now = Date.now();
+        const timestamps = cooldowns.get(command.name);
+        const cooldownAmount = (command.cooldown || 3) * 1000;
+
+        if (timestamps.has(message.author.id)) {
+            const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+
+            if (now < expirationTime) {
+                const timeLeft = (expirationTime - now) / 1000;
+                return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
+            }
+        }
+
+
+        timestamps.set(message.author.id, now);
+        setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+
+        // Stats for fun commands
+        if (command.stats == true) { utils.addStats(command.name.toLowerCase()); }
+
+        // Execute
+        try {
+            command.execute(client, message, args);
+        }
+        catch (err) {
+            utils.discordException(client, err, message, command);
+        }
+    }
+} */
+
+function handleCommand(client, message) {
+    // Init command
+    if (message.content.split(' ').length == 1) {
+        if (message.mentions.has(client.user)) {
+            message.channel.send("Hey!\nMy prefixes are: `a.` and `ab.`");
+            return;
+        }
+    };
+
+    for (prefix of config.prefixes) {
+        if (message.content.toLowerCase().startsWith(prefix) && !message.author.bot) handle();
     }
 
-    // Cooldown
-    if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Discord.Collection());
-    const now = Date.now();
-    const timestamps = cooldowns.get(command.name);
-    const cooldownAmount = (command.cooldown || 3) * 1000;
+    function handle() {
+        const args = message.content.slice(prefix.length).trim().split(/ +/);
+        const commandName = args.shift().toLowerCase();
+        /* const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName)); */
+        const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.group && cmd.name && cmd.name.includes(commandName)) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+        if (!command) return;
+        command.name = commandName;
 
-    if (timestamps.has(message.author.id)) {
-        const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+        // GuildOnly
+        if (command.guildOnly && message.channel.type === 'dm') {
+            var embed = new Discord.MessageEmbed()
+                .setColor('#fa3c3c')
+                .setTitle('Error')
+                .setDescription("I am unable to execute this command in DMs.")
+                .setTimestamp()
+                .setFooter(`Executed by ${message.author.username}`, message.author.avatarURL({ format: "png" }));
+            return message.channel.send(embed);
+        }
+        // command perms
+        if (command.permissions) {
+            const authorPerms = message.channel.permissionsFor(message.author);
+            if (!authorPerms || !authorPerms.has(command.permissions)) {
+                return message.reply('You can not do this!');
+            }
+        }
 
-        if (now < expirationTime) {
-            const timeLeft = (expirationTime - now) / 1000;
-            return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
+        // DevOnly
+        if (command.devOnly) {
+            if (utils.getDevs().includes(message.author.id)) {
+                var embed = new Discord.MessageEmbed()
+                    .setColor('#ff9900')
+                    .setTitle('Information')
+                    .setDescription("You are executing this command in devOnly mode. This means, the bot currently registers you as a Developer. If you think this is a mistake, please contact us [here](https://alphase/com/contact/)!")
+                    .setTimestamp()
+                    .setFooter(`Executed by ${message.author.username}`, message.author.avatarURL({ format: "png" }));
+                message.channel.send(embed);
+            } else return;
+        }
+
+        // Arguments
+        if (command.args) {
+            if (command.args != -1) {
+                if (args.length != command.args) {
+                    let reply = `You didn't provide any arguments, ${message.author}!`;
+                    if (command.usage) reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
+
+                    var embed = new Discord.MessageEmbed()
+                        .setColor('#fa3c3c')
+                        .setTitle("Error")
+                        .setDescription(reply);
+                    return message.channel.send(embed);
+                }
+            } else {
+                if (args.length == 0) { return message.channel.send(`You forgot to provide the \`${command.usage}\` argument.`) }
+            }
+        }
+
+        // Cooldown
+        if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Discord.Collection());
+        const now = Date.now();
+        const timestamps = cooldowns.get(command.name);
+        const cooldownAmount = (command.cooldown || 3) * 1000;
+
+        if (timestamps.has(message.author.id)) {
+            const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+
+            if (now < expirationTime) {
+                const timeLeft = (expirationTime - now) / 1000;
+                return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
+            }
+        }
+
+
+        timestamps.set(message.author.id, now);
+        setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+
+        // Stats for fun commands
+        if (command.stats == true) { utils.addStats(command.name.toLowerCase()); }
+
+        // Execute
+        try {
+            if (command.parseCommands == true) {
+                command.execute(client, command.name, message, args);
+            } else {
+                command.execute(client, message, args);
+            }
+        }
+        catch (err) {
+            utils.discordException(client, err, message, command);
+        }
+    }
+}
+
+function registerCommands(client) { register(client, "commands"); }
+function registerEvents(client) { register(client, "events"); }
+function register(client, type) {
+    const folders = fs.readdirSync(`./${type}`);
+    for (sub of folders) {
+        if (sub.endsWith('.js')) {
+            const item = require(`./${type}/${sub}`);
+            handleItem(item);
+            return;
+        }
+        let files = fs.readdirSync(`./${type}/${sub}`).filter(file => file.endsWith('.js'));
+        for (file of files) {
+            try {
+                const item = require(`./${type}/${sub}/${file}`);
+                handleItem(item);
+            } catch (err) { console.log(`Something went wrong... shutting down!\n${err.stack}`); process.exit(); }
         }
     }
 
-    timestamps.set(message.author.id, now);
-    setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
-
-    // Execute
-    try { command.execute(client, message, args); }
-    catch (err) {
-        var embed = new Discord.MessageEmbed()
-            .setColor('#fa3c3c')
-            .setTitle('Error')
-            .setDescription("Something went wrong trying to execute the command. The devs have been notified about this issue. Please try again later.")
-            .setTimestamp()
-            .setFooter(`Executed by ${message.author.username}`, message.author.avatarURL({ format: "png" }));
-
-        var devEmbed = new Discord.MessageEmbed()
-            .setColor('#fa3c3c')
-            .setTitle(`${err.name}`)
-            .setDescription(err.stack)
-            .addFields(
-                { name: "Short", value: err.message, inline: true },
-                { name: "Information", value: `Occurred in: ${command.name}.\nOccurred at: ${curTime()}\nExecuted by: ${message.author.tag}\nExecuted in: ${message.guild.name}`, inline: true }
-            )
-            .setTimestamp()
-            .setFooter(`Executed by ${message.author.username}`, message.author.avatarURL({ format: "png" }));
-
-        message.channel.send(embed);
-        client.users.fetch("414585685895282701")
-            .then(userObj => userObj.send(devEmbed))
-            .catch(console.err);
-        console.error(err);
+    function handleItem(item) {
+        switch (type) {
+            case ("events"):
+                item.registerEvents(client);
+                break;
+            case ("commands"):
+                client.commands.set(item.name, item);
+                break;
+            default:
+                return;
+        }
     }
-});
+}
 
-function curTime() { return new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''); }
-// Login into Discord API
-try { client.login(config.token); } catch (err) { console.error(`Something went wrong trying to log in.\n${err}`); }
+module.exports = { handleCommand, registerCommands, registerEvents }
