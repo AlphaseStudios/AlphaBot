@@ -1,6 +1,6 @@
 # Alphabot
-#### A project powered by Alphase
----
+A project powered by Alphase
+
 # Features
 - Moderation
 - Automoderation
