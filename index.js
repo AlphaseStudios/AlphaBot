@@ -4,7 +4,7 @@ const fs = require('fs');
 const jimp = require('jimp');
 const fetch = require('node-fetch')
 const DiscordOauth2 = require('discord-oauth2')
-
+require('dotenv').config()
 var client = new Discord.Client({ partials: ['REACTION', 'CHANNEL', 'MESSAGE'], fetchAllMembers: true, messageCacheLifetime: 60, messageSweepInterval: 20 });
 var stats = JSON.parse(fs.readFileSync('stats.json'))
 
@@ -19,7 +19,7 @@ const oauth = new DiscordOauth2({
 
 // Firebase initialization
 firebase.initializeApp({
-    credential: firebase.credential.cert(JSON.parse(process.env.FB)),
+    credential: firebase.credential.cert(JSON.parse(process.env.FB_TOKEN)),
     databaseURL: "https://discordbot-58332.firebaseio.com"
 });
 
@@ -30,7 +30,7 @@ async function LoadDB() {
     await db.ref().once('value').then(function(snapshot) {
         global.Servers = snapshot.val().Servers;
         global.Users = snapshot.val().Users;
-        client.login(process.env.TOKEN)
+        client.login(process.env.BETA_TOKEN)
     })
 }
 LoadDB()
@@ -1640,7 +1640,7 @@ const crypto = require('crypto');
 
 const algorithm = 'aes-256-ctr';
 
-const secretKey = process.env.encCode.toString();
+const secretKey = process.env.encryption
 
 /**
  * Encrypts a string.
