@@ -13,10 +13,16 @@ Yes. Tho we would really like to invite our already existing bot to your server 
 ## How do I set it up?
 Download the source code
 open your terminal
-type <code>cd Alphabot</code>
-<code>npm i</code>
-Then open the .env file and get the tokens
-then just type <code>node .</code>
+type
+```log
+cd Alphabot
+npm i
+```
+Then open the `.env` file and get the tokens
+then just type 
+```log
+node .
+```
 
 now the bot should start up.
 generate a invite link and invite it to your server!
