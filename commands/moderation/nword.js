@@ -1,4 +1,5 @@
 const Discord = require('discord.js')
+const firebase = require('firebase-admin')
 
 module.exports = {
     name: 'nword',
@@ -23,27 +24,32 @@ module.exports = {
             }
             message.channel.send(embed);
         }
-        var temp = new Discord.MessageEmbed().setTitle("The N-Word Filter Type was set to:").setColor("#FF0000");
 
-        switch (args[1]) {
-            case "0":
-                global.Servers[message.guild.id].nword = "0";
-                temp.setDescription("0: No Filter")
-                break;
-            case "1":
-                global.Servers[message.guild.id].nword = "1";
-                temp.setDescription("1: Delete Message and Warn User")
-                break;
-            case "2":
-                global.Servers[message.guild.id].nword = "2";
-                temp.setDescription("2: Ban User")
-                break;
-            default:
-                temp.setTitle("I Didn't Quite Understand that :thinking:")
-                message.channel.send(temp)
-                return;
-        }
+        var temp = new Discord.MessageEmbed().setTitle("The N-Word Filter Type was set to:").setColor("#FF0000");
         message.channel.send(temp)
-        firebase.database().ref().child("Servers").update(global.Servers);
+
+        if (args[1])
+        {
+            switch (args[1]) {
+                case "0":
+                    global.Servers[message.guild.id].nword = "0";
+                    temp.setDescription("0: No Filter")
+                    break;
+                case "1":
+                    global.Servers[message.guild.id].nword = "1";
+                    temp.setDescription("1: Delete Message and Warn User")
+                    break;
+                case "2":
+                    global.Servers[message.guild.id].nword = "2";
+                    temp.setDescription("2: Ban User")
+                    break;
+                default:
+                    temp.setTitle("I Didn't Quite Understand that :thinking:")
+                    message.channel.send(temp)
+                    return;
+            }
+            firebase.database().ref().child("Servers").update(global.Servers);
+        }
+        
     },
 };

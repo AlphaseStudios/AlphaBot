@@ -2,6 +2,8 @@ const Discord = require("discord.js");
 const fs = require("fs");
 const jimp = require("jimp");
 
+const lvls = [75, 300, 675, 1200, 1875, 2700, 3675, 4800, 6075, 7500, 9075, 10800, 12675, 14700, 16875, 19200, 21675, 24300, 27075, 30000, 33075, 36300, 39675, 43200, 46875, 50700, 54675, 58800, 63075, 67500, 72075, 76800, 81675, 86700, 91875, 97200, 100000]
+
 module.exports = {
     name: 'level',
     aliases: ['lvl'],
@@ -25,7 +27,7 @@ module.exports = {
                 dotLength = Number.isNaN(dotLength) ? 291 : dotLength > 291 ? 291 : dotLength < 1 ? 1 : dotLength
                 dot.resize(dotLength, 14)
                 // Load background
-                jimp.read("./resources/grayimage.png", (err, img) => {
+                jimp.read("./resources/grayimage_.png", (err, img) => {
                     if (err) throw err;
                     //var MaxXP = lvls[global.Users[message.guild.id][target.id].lvl] == undefined ? "INFINITY " : lvls[global.Users[message.guild.id][target.id].lvl]
                     img
@@ -36,7 +38,7 @@ module.exports = {
                         .print(global.robotoBlackSmall, 174, 33, { text: `${target.user.username.split('#')[0]}'s Stats` })
                         //target.joinedAt.toLocaleDateString('en-GB') didn't display the correct format (DD/MM/YYYY), had to use this...
                         .print(global.robotoBlackSmall, 174, 55, `Join Date: ${target.joinedAt.getDate()}/${target.joinedAt.getMonth() + 1}/${target.joinedAt.getFullYear()} (DD/MM/YYYY)`)
-                        .write(`./imgs/${target.id}.png`, () => {
+                        .write(`./resources/${target.id}.png`, () => {
                             message.channel.send(new Discord.MessageAttachment(`./resources/${target.id}.png`)).then(() => {
                                 fs.unlinkSync(`./resources/${target.id}.png`)
                             });

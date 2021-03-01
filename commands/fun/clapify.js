@@ -7,7 +7,7 @@ module.exports = {
     usage: '<message>',
     stats: true,
     args: -1,
-    description: ':clap: Clapify :clap: something :clap:',
+    description: '👏 Clapify 👏 something 👏',
     execute(client, message, args) {
         var msg = ":clap: " + args.join(" :clap: ") + " :clap:"
         msg = Discord.Util.removeMentions(msg)

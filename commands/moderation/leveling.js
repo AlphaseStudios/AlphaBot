@@ -9,6 +9,9 @@ module.exports = {
         var guild = message.guild.id;
         if (!message.member.hasPermission("ADMINISTRATOR")) return;
 
+        if (!global.Servers[guild]) global.Servers[guild] = {}
+                
+
         switch (args[1]) {
             case "msg":
                 var msg = args.filter(arg => args.indexOf(arg) > 1).join(" ");
