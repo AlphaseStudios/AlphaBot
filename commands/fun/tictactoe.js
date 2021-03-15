@@ -8,7 +8,7 @@ module.exports = {
     guildOnly: true,
     stats: true,
     execute(client, message, args) {
-        var tmp = JSON.parse(fs.readFileSync('./temp.json'))
+        var tmp = JSON.parse(fs.readFileSync('./resources/temp.json'))
         if (!message.mentions.members.first() || message.mentions.members.first().id == message.member.id || message.mentions.members.first().user.bot) {
             message.channel.send("Please mention a user to play with!")
             return;

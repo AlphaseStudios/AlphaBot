@@ -8,11 +8,10 @@ module.exports = {
     parseCommands: true,
     description: 'Gives you the bots stats.',
     execute(client, command, message, args) {
-
         const sorted = Object.fromEntries(Object.entries(rawStats).sort(([, a], [, b]) => b - a));
         var statsData = [], statsLabels = [];
         for (item in sorted) { statsData.push(sorted[item]); statsLabels.push(item); }
-        if(command == "accuratestats") {
+        if (command == "accuratestats") {
             let msg = "\`\`\`";
             for (index in statsLabels) {
                 msg += `${statsLabels[index]} - ${statsData[index]}\n`;
@@ -53,7 +52,7 @@ module.exports = {
         chart.toFile(file).then(() => {
             message.channel.send('', { files: [file] }).then(() => {
                 fs.unlink(file, () => { });
-                message.channel.send('_powered by https://quickchart.io/_')
+                // message.channel.send('_powered by https://quickchart.io/_')
             });
         });
 
