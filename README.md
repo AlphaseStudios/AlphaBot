@@ -10,9 +10,9 @@ A project powered by Alphase
 # Can I use this bot for myself?
 Yes. Tho we would really like to invite our already existing bot to your server you can also download its source and run it yourself.
 
-## How do I set it up?
-Download the source code
-open your terminal
+## How do I set it up? 
+Download the source code,
+open your terminal and
 type
 ```log
 cd Alphabot
