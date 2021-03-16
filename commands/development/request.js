@@ -33,7 +33,6 @@ module.exports = {
                         })
                         .catch((err) => {
                             message.channel.send(`\`\`\`log\n${err.stack}\`\`\``);
-                            console.log(err);
                         });
                 });
         } else if (method.toLowerCase() == 'post') {

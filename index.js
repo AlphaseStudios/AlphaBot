@@ -42,7 +42,7 @@ try {
         console.time("Started in");
         handler.registerCommands(client);
         handler.registerEvents(client);
-        client.login(process.env.BETA_TOKEN).then(() => {
+        client.login(process.env.TOKEN).then(() => {
             api.init();
         }).catch((err) => { utils.discordException(client, err) });
     });

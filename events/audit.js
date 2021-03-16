@@ -360,5 +360,9 @@ module.exports = {
             embed.description += msg + `Target Channel: ${entry.target.type == "voice" ? `\`${entry.target.name}\`` : entry.target}`
             modLogChannel.send(embed)
         })
+
+        function getKeyByValue(object, value) {
+            return Object.keys(object).find(key => object[key] === value);
+        }
     }
 }
