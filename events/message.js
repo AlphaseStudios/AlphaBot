@@ -1,3 +1,6 @@
+const config = JSON.parse(require('../resources/config.json'));
+
+var nwordRegex = new RegExp(config.nwordRegex, "gi");
 module.exports = {
     registerEvents(client) {
         client.on('messageUpdate', (oldMessage, newMessage) => {

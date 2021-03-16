@@ -2,7 +2,7 @@
 const Discord = require('discord.js');
 const handler = require('./handler.js');
 const utils = require('./utils.js');
-const config = require('./resources/config.json');
+var config = require('./resources/config.json');
 const api = require('./api');
 require('dotenv').config()
 
@@ -12,10 +12,19 @@ client.commands = new Discord.Collection();
 // CommandHandler
 var nwordRegex = new RegExp(config.nwordRegex, "gi");
 client.on('message', message => {
-    if (message.content.match(nwordRegex)) {
-        message.delete();
-        message.channel.send("You can't say that on this server!");
-        return;
+    if (!global.Servers[message.guild.id]) global.Servers[message.guild.id] = {}
+    // N-Word Detection
+    if (message.content.match(nwordRegex)) { //imma push the fix to git
+        switch (global.Servers[message.guild.id].nword) {
+            case "1":
+                message.delete();
+                message.channel.send("You can't say the n-word on this server!")
+                break;
+            case "2":
+                if (message.member.bannable) message.member.ban({ reason: "You are not allowed to say the n-word here!" })
+                message.channel.send("You can't say the n-word on this server!")
+                break;
+        }
     }
     handler.handleCommand(client, message);
 });
