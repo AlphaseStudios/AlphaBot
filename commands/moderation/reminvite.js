@@ -1,4 +1,6 @@
 const Discord = require("discord.js")
+const firebase = require('firebase-admin')
+
 module.exports = {
     name: 'reminvite',
     description: 'Removes a invite link.',
@@ -8,7 +10,7 @@ module.exports = {
 
         if (!global.Servers[message.guild.id]) global.Servers[message.guild.id] = {}
 
-        switch (args[1]) {
+        switch (args[0]) {
             case "s":
                 global.Servers[message.guild.id].remInvState = global.Servers[message.guild.id].remInvState ? !global.Servers[message.guild.id].remInvState : true
                 message.channel.send(`The bot will no${global.Servers[message.guild.id].remInvState ? "w" : " longer"} delete Invite Links!`)
@@ -19,7 +21,7 @@ module.exports = {
 
                 if (!global.Servers[message.guild.id].allowedInvRoles) global.Servers[message.guild.id].allowedInvRoles = []
 
-                switch (args[2]) {
+                switch (args[1]) {
                     case "a":
                     case "add":
                         if (!message.mentions.roles.first()) {
@@ -55,7 +57,7 @@ module.exports = {
                 break;
             case "channels":
                 if (!global.Servers[message.guild.id].allowedInvChannels) global.Servers[message.guild.id].allowedInvChannels = []
-                switch (args[2]) {
+                switch (args[1]) {
                     case "a":
                     case "add":
                         if (!message.mentions.channels.first()) {

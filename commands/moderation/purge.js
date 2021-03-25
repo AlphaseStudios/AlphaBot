@@ -1,8 +1,9 @@
 module.exports = {
     name: 'clear',
-    aliases: ['purge', 'remove'],
+    aliases: ['purge', 'delete'],
     usage: '<amount>',
     args: 1,
+    guildOnly: true,
     description: 'Clear a given amount of messages.',
     execute(client, message, args) {
         message.react('✅');

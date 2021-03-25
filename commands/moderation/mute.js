@@ -5,7 +5,6 @@ var db = firebase.database()
 module.exports = {
     name: 'mute',
     description: 'Mutes a member.',
-    aliases: ['shut'],
     usage: '<@member>',
     guildOnly: true,
     execute(client, message, args) {

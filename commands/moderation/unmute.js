@@ -2,7 +2,6 @@ const Discord = require("discord.js")
 module.exports = {
     name: 'unmute',
     description: 'Unmute someone.',
-    aliases: ['remmute'],
     guildOnly: true,
     execute(client, message, args) {
         if (!message.member.hasPermission("MUTE_MEMBERS")) return false;

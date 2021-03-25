@@ -12,7 +12,7 @@ module.exports = {
         if (!global.Servers[guild]) global.Servers[guild] = {}
                 
 
-        switch (args[1]) {
+        switch (args[0]) {
             case "msg":
                 var msg = args.filter(arg => args.indexOf(arg) > 1).join(" ");
                 if (msg != "") {
@@ -45,7 +45,7 @@ module.exports = {
                 firebase.database().ref().child("Servers").update(global.Servers)
                 break;
             case "multiplier":
-                var arg = parseFloat(args[2]);
+                var arg = parseFloat(args[1]);
                 if (!isNaN(arg)) {
                     if (arg < 0.5 || arg > 2) {
                         message.channel.send("The Multiplier cannot be bigger than 2 or smaller than 0.5!")

@@ -1,12 +1,12 @@
 const config = JSON.parse(require('../resources/config.json'));
 
-var nwordRegex = new RegExp(config.nwordRegex, "gi");
+const nwordRegex = new RegExp(config.nwordRegex, "gi");
 module.exports = {
     registerEvents(client) {
         client.on('messageUpdate', (oldMessage, newMessage) => {
             if (!newMessage.content || newMessage.channel.type == "dm") return
             // N-Word Detection
-            if (newMessage.content.match(nwordRegEx)) {
+            if (newMessage.content.match(nwordRegex)) {
                 switch (global.Servers[newMessage.guild.id].nword) {
                     case "1":
                         newMessage.delete();
@@ -17,6 +17,13 @@ module.exports = {
                         return;
                         break;
                 }
+            }
+
+            if (newMessage.content.match(inviteRegex) && global.Servers[newMessage.guild.id].remInvState && newMessage.deletable) {
+
+                if (newMessage.member.roles.cache.array().some(r => global.Servers[newMessage.guild.id].allowedInvRoles.indexOf(r) >= 0) ||
+                    global.Servers[newMessage.guild.id].allowedInvChannels.includes(newMessage.channel.id)) return
+                newMessage.delete()
             }
         })
 

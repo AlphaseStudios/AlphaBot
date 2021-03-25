@@ -10,7 +10,8 @@ const client = new Discord.Client({ partials: ['REACTION', 'CHANNEL', 'MESSAGE']
 client.commands = new Discord.Collection();
 
 // CommandHandler
-var nwordRegex = new RegExp(config.nwordRegex, "gi");
+const nwordRegex = new RegExp(config.nwordRegex, "gi");
+const inviteRegex = new RegExp(config.inviteRegex, "gi")
 client.on('message', message => {
     if (!global.Servers[message.guild.id]) global.Servers[message.guild.id] = {}
     // N-Word Detection
@@ -25,6 +26,13 @@ client.on('message', message => {
                 message.channel.send("You can't say the n-word on this server!")
                 break;
         }
+    }
+
+    if (message.content.match(inviteRegex) && global.Servers[message.guild.id].remInvState && message.deletable) {
+
+        if (message.member.roles.cache.array().some(r => global.Servers[message.guild.id].allowedInvRoles.indexOf(r) >= 0) ||
+            global.Servers[message.guild.id].allowedInvChannels.includes(message.channel.id)) return
+        message.delete()
     }
     handler.handleCommand(client, message);
 });
@@ -51,8 +59,15 @@ try {
         console.time("Started in");
         handler.registerCommands(client);
         handler.registerEvents(client);
-        client.login(process.env.TOKEN).then(() => {
+        client.login(process.env.BETA_TOKEN).then(() => {
             api.init();
         }).catch((err) => { utils.discordException(client, err) });
     });
 } catch (err) { console.error(`Something went wrong trying to log in.\n${err}`); }
+
+
+
+Array.prototype.hasDupes = function() {
+    console.log(this)
+    return (new Set(this)).size !== this.length;
+}

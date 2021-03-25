@@ -1,4 +1,5 @@
 const Discord = require("discord.js")
+const firebase = require("firebase-admin")
 module.exports = {
     name: 'rr',
     description: 'Make a reactionrole.',
@@ -12,7 +13,7 @@ module.exports = {
         if (!global.Servers[guild.id]) global.Servers[guild.id] = {}
         if (!global.Servers[guild.id].rr) global.Servers[guild.id].rr = {}
 
-        switch (args[1]) {
+        switch (args[0]) {
             case "add":
                 if (!message.mentions.channels.first()) {
                     message.channel.send("Please mention a channel!")
@@ -139,8 +140,8 @@ module.exports = {
                 break;
 
             case "remove":
-                var msgID = args[2]
-                if (!args[2]) message.channel.send("Please type a message ID!")
+                var msgID = args[1]
+                if (!args[1]) message.channel.send("Please type a message ID!")
                 else if (!global.Servers[guild.id].rr[msgID]) message.channel.send("There are no RR configured for this message!")
                 else {
                     if (Object.keys(global.Servers[guild.id].rr[msgID]).length > 1) {

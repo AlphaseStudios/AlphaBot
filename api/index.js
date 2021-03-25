@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const algorithm = 'aes-256-ctr';
 const secretKey = process.env.encryption;
 const DiscordOauth2 = require('discord-oauth2');
+const firebase = require('firebase-admin')
 require('dotenv').config();
 
 const oauth = new DiscordOauth2({

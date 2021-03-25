@@ -1,5 +1,6 @@
 module.exports = {
     registerEvents(client) {
+        console.log("LOG")
         client.on('messageReactionAdd', (reaction, user) => {
             if (reaction.message.channel.type == "dm" || user.bot) return;
             var guild = reaction.message.guild;
