@@ -9,7 +9,7 @@ module.exports = {
     guildOnly: true,
     execute(client, message, args) {
         if (!message.member.hasPermission("ADMINISTRATOR")) return;
-        if (args[1] == "d") {
+        if (args[0] == "d") {
             if (!global.Servers[message.guild.id]) return;
             if (!global.Servers[message.guild.id].modlog) return;
             var temp = new Discord.MessageEmbed()

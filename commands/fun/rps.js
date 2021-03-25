@@ -4,15 +4,14 @@ const utils = require('../../utils.js');
 module.exports = {
     name: 'rps',
     aliases: ['rockpaperscissors'],
-    args: 1,
     description: 'Ask me something!',
     stats: true,
     execute(client, message, args) {
-        if (args[1].match(/(r(ock)?)|(p(aper)?)|(s(cissors)?)/gmi)) {
+        if (args[0].match(/(r(ock)?)|(p(aper)?)|(s(cissors)?)/gmi)) {
             var choice = ""
-            if (args[1].toLowerCase().startsWith("r")) choice = "Rock :moyai:"
-            else if (args[1].toLowerCase().startsWith("p")) choice = "Paper :roll_of_paper:"
-            else if (args[1].toLowerCase().startsWith("s")) choice = "Scissors :scissors:"
+            if (args[0].toLowerCase().startsWith("r")) choice = "Rock :moyai:"
+            else if (args[0].toLowerCase().startsWith("p")) choice = "Paper :roll_of_paper:"
+            else if (args[0].toLowerCase().startsWith("s")) choice = "Scissors :scissors:"
 
             var myChoice = ["Rock :moyai:", "Paper :roll_of_paper:", "Scissors :scissors:"][Math.floor(Math.random() * 3)]
 

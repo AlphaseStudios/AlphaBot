@@ -6,7 +6,7 @@ module.exports = {
     execute(client, message, args) {
         if (!message.member.hasPermission("MANAGE_GUILD")) return;
         if (!global.Servers[message.guild.id]) global.Servers[message.guild.id] = {}
-        switch (args[1]) {
+        switch (args[0]) {
             case "wc":
                 if (!message.mentions.channels.first()) {
                     var temp = new Discord.MessageEmbed()
@@ -41,13 +41,13 @@ module.exports = {
 
             case "f":
                 var msg = ''
-                for (var i = 2; i < args.length; i++) {
+                for (var i = 1; i < args.length; i++) {
                     msg += args[i]
                     if (i != args.length - 1) {
                         msg += " ";
                     }
                 }
-                if (args[2] == null) {
+                if (args[0] == null) {
                     msg = "Default Message"
                 }
                 global.Servers[message.guild.id].fMsg = msg;
@@ -61,13 +61,13 @@ module.exports = {
 
             case "w":
                 var msg = ''
-                for (var i = 2; i < args.length; i++) {
+                for (var i = 1; i < args.length; i++) {
                     msg += args[i]
                     if (i != args.length - 1) {
                         msg += " ";
                     }
                 }
-                if (args[2] == null) {
+                if (args[1] == null) {
                     msg = "Default Message"
                 }
                 global.Servers[message.guild.id].wMsg = msg;
@@ -158,6 +158,6 @@ module.exports = {
                 message.channel.send(embed);
                 break;
         }
-        args[1] != null && args[1].match(/\b((w)|(fc)|(wc)|(f)|(r)|(t))\b/gmi) ? firebase.database().ref().child('Servers').update(global.Servers) : null;
+        args[0] != null && args[0].match(/\b((w)|(fc)|(wc)|(f)|(r)|(t))\b/gmi) ? firebase.database().ref().child('Servers').update(global.Servers) : null;
     },
 };

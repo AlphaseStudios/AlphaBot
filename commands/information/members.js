@@ -5,7 +5,7 @@ module.exports = {
     guildOnly: true,
     execute(client, message, args) {
         var usrCount = message.guild.members.cache.filter(mmbr => !mmbr.user.bot).size;
-        if (args[1] == "c") {
+        if (args[0] == "c") {
             if (!message.member.hasPermission("MANAGE_CHANNELS")) return;
             message.guild.channels.create(`Member Count: ${usrCount}`, { type: 'voice' }).catch(err => { message.channel.send("Unable to create channel!") }).then(vc => {
                 vc.setPosition(0);

@@ -11,7 +11,7 @@ module.exports = {
         if (!global.Servers[message.guild.id]) global.Servers[message.guild.id] = {}
         if (!global.Servers[message.guild.id].noxp) global.Servers[message.guild.id].noxp = [];
 
-        switch (args[1]) {
+        switch (args[0]) {
             case "r":
             case "remove":
             case "delete":
