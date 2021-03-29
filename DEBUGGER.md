@@ -16,11 +16,12 @@ Note: ? is a optional parameter
 
 <br>
 
-### `debug.setLevel(level)`
+### `debug.setLevel(level = 0)`
 Set the log level
 
 params:
 * level: number (-1 to 3)
+  + default: 0
   + description: The log level you want to have outputed in your console.
   + levels:
     * -1: Everything (more then in default)

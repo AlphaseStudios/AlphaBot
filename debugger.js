@@ -18,7 +18,7 @@ function setLevel(level) {
   defaultLevel = level;
 }
 
-function sendInfo(message, level = null) { send(message, level, 'INFO', '\u001b[33;1m'); }
+function sendInfo(message, level = 0) { send(message, level, 'INFO', '\u001b[33;1m'); }
 function sendWarn(message) { send(message, 2, 'WARNING', '\u001b[38;5;166m'); }
 function sendErr(message, err, exit = false) {
   let ts = Date.now();

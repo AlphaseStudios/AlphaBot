@@ -55,9 +55,9 @@ client.on("error", (e) => debug.sendErr('Discord Error:', e));
 client.on("warn", (e) => debug.sendWarn(e));
 client.on("debug", (e) => debug.sendInfo(e, -1));
 
-// Load fonts and db and login in to the Discord API
+// Load fonts, db and login in to the Discord API
 try {
-  debug.setLevel(-1);
+  debug.setLevel(0); // Default debugger level
 
   utils.errorListerners(client);
   utils.loadFonts();
@@ -74,6 +74,7 @@ try {
 
     debug.sendInfo('Logging in', 0);
     client.login(process.env.TOKEN).then(() => {
+      debug.sendInfo('Initializing API');
       api.init();
     }).catch((err) => { utils.discordException(client, err) });
   });
