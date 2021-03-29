@@ -7,9 +7,9 @@ var defaultLevel = 0;
   2 - Warn
   3 - Error
 */
-function sendInfo(message, level = null) { send(message, level, 'INFO') }
-function sendWarn(message) { send(message, 2, 'WARNING') }
-function sendErr(message) { send(message, 3, 'ERROR') }
+function sendInfo(message, level = null) { send(message, level, 'INFO'); }
+function sendWarn(message) { send(message, 2, 'WARNING'); }
+function sendErr(message) { send(message, 3, 'ERROR'); process.exit() }
 
 var timers = [];
 function time(label) {
@@ -35,7 +35,7 @@ function timeEnd(label) {
 
 function send(message, level = null, type) {
   if (typeof level != 'number') level = 1;
-  if (typeof message != 'string') { console.log(`The message argument has to be type of string`); return; }
+  if (typeof message != 'string') { console.log(`[ERROR] The message argument has to be type of string`); process.exit(); }
 
   if (debug) {
     if (defaultLevel <= level) {

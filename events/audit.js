@@ -283,7 +283,6 @@ module.exports = {
                 entry = await guild.fetchAuditLogs({ type: sArr[i] }).then(audit => {
                     var a = audit.entries.first()
                     if (Date.now() - a.createdTimestamp < 20000) {
-                        //console.log(a)
                         return a
                     }
                     else {

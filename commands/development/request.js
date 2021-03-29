@@ -39,28 +39,6 @@ module.exports = {
             msg.channel.send("I am currently unable to do POST requests.")
         }
 
-        /* var url = `https://duckduckgo.com/?q=${escape(args.join(" "))}&format=json`; */
-        /* message.channel.send("Searching the web...")
-            .then((msg) => {
-                axios.get(url)
-                    .then((res) => {
-                        if (res.status != 200) message.channel.send(`The server responded with a ${res.status} (${res.statusText})`)
-                        /* console.log(response.data); */
-        /* var embed = new Discord.MessageEmbed().setTitle(`Search results for \'${args.join(" ")}\'`);
-        var results = res.data['items'];
-        for (i in results) {
-            if (!results[i].title.includes('porn') || !results[i].snippet.includes('porn')) {
-                embed.addField(`${results["Abstract"]}`, `${results["AbstractText"]}\n[Follow](${results["AbstractURL"]})`);
-            }
-        }
-        msg.edit(embed);
-    })
-                    .catch((err) => {
-        utils.discordException(client, err, message, command);
-    });
-}); * /
- */
-
         function getArgument(arg, all) {
             if (arg == null) return null;
             arg = `-${arg}`;

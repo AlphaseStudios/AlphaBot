@@ -53,7 +53,7 @@ client.on('ready', () => {
 
 client.on("error", (e) => debug.sendErr(e));
 client.on("warn", (e) => debug.sendWarn(e));
-/* client.on("debug", (e) => console.info(e)); */
+/* client.on("debug", (e) => debug.sendInfo(e, 0)); */
 
 // Load fonts and db and login in to the Discord API
 try {

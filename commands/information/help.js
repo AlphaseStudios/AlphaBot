@@ -37,8 +37,6 @@ module.exports = {
                 } else {
                     if (command.aliases == null) command.aliases = [];
                     if (args[0].toLowerCase() == command.name || command.aliases.includes(args[0].toLowerCase())) {
-                        console.log("Cum")
-
                         if (command.aliases == null) command.aliases = ["none"];
                         embed.addField("Name", `\`\`\`txt\n${config.prefixes[0]}${command.name} ${command.usage}\`\`\``, true)
                             .addField("Description", `\`\`\`txt\n${command.description}\`\`\``)

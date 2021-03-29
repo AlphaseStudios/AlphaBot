@@ -3,6 +3,7 @@ const firebase = require('firebase-admin');
 const stats = require('./resources/stats.json');
 const fs = require('fs');
 const Discord = require('discord.js');
+const { debug } = require('./debugger.js');
 const devs = ["332567411620577280", "414585685895282701"];
 var loggedIn = false;
 function discordLoggedIn() { loggedIn = true; }
@@ -62,10 +63,10 @@ function discordException(client, err, message = null, command = null) {
         if (loggedIn) {
             client.users.fetch(dev)
                 .then(userObj => userObj.send(devEmbed))
-                .catch(err => { console.error });
+                .catch(err => { debug.sendErr(err) });
         }
 
-        console.error(err);
+        debug.sendErr(err);
     }
 }
 

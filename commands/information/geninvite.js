@@ -8,6 +8,6 @@ module.exports = {
             .then(invite => {
                 message.channel.send(`Heres a invite link to this server: ${invite.url}.`)
             })
-            .catch(console.error);
+            .catch(debug.sendErr);
     },
 };

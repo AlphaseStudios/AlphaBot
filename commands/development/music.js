@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
+const { debug } = require("../../debugger");
 const client = new Discord.Client();
 const queue = new Map();
 
@@ -57,7 +58,7 @@ module.exports = {
                     queueContruct.connection = connection;
                     play(message.guild, queueContruct.songs[0]);
                 } catch (err) {
-                    console.log(err);
+                    debug.sendErr(err);
                     queue.delete(message.guild.id);
                     return message.channel.send(err);
                 }
@@ -81,7 +82,7 @@ module.exports = {
                     serverQueue.songs.shift();
                     play(guild, serverQueue.songs[0]);
                 })
-                .on("error", error => console.error(error));
+                .on("error", error => debug.sendErr(error));
             dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
             serverQueue.textChannel.send(`Start playing: **${song.title}**`);
         }
