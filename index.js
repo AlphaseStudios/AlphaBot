@@ -14,66 +14,71 @@ client.commands = new Discord.Collection();
 const nwordRegex = new RegExp(config.nwordRegex, "gi");
 const inviteRegex = new RegExp(config.inviteRegex, "gi")
 client.on('message', message => {
-    if (!global.Servers[message.guild.id]) global.Servers[message.guild.id] = {}
-    // N-Word Detection
-    if (message.content.match(nwordRegex)) { //imma push the fix to git
-        switch (global.Servers[message.guild.id].nword) {
-            case "1":
-                message.delete();
-                message.channel.send("You can't say the n-word on this server!")
-                break;
-            case "2":
-                if (message.member.bannable) message.member.ban({ reason: "You are not allowed to say the n-word here!" })
-                message.channel.send("You can't say the n-word on this server!")
-                break;
-        }
+  if (!global.Servers[message.guild.id]) global.Servers[message.guild.id] = {}
+  // N-Word Detection
+  if (message.content.match(nwordRegex)) { //imma push the fix to git
+    switch (global.Servers[message.guild.id].nword) {
+      case "1":
+        message.delete();
+        message.channel.send("You can't say the n-word on this server!")
+        break;
+      case "2":
+        if (message.member.bannable) message.member.ban({ reason: "You are not allowed to say the n-word here!" })
+        message.channel.send("You can't say the n-word on this server!")
+        break;
     }
+  }
 
-    if (message.content.match(inviteRegex) && global.Servers[message.guild.id].remInvState && message.deletable) {
+  if (message.content.match(inviteRegex) && global.Servers[message.guild.id].remInvState && message.deletable) {
 
-        if (message.member.roles.cache.array().some(r => global.Servers[message.guild.id].allowedInvRoles.indexOf(r) >= 0) ||
-            global.Servers[message.guild.id].allowedInvChannels.includes(message.channel.id)) return
-        message.delete()
-    }
-    handler.handleCommand(client, message);
+    if (message.member.roles.cache.array().some(r => global.Servers[message.guild.id].allowedInvRoles.indexOf(r) >= 0) ||
+      global.Servers[message.guild.id].allowedInvChannels.includes(message.channel.id)) return
+    message.delete()
+  }
+  handler.handleCommand(client, message);
 });
 
 // Ready event
 client.on('ready', () => {
-    debug.sendInfo('Fired \'ready\' event', 0);
+  debug.sendInfo('Fired \'ready\' event', 0);
 
-    debug.sendInfo(`Successfully logged in as ${client.user.tag} at ${utils.curTime()}`);
-    debug.timeEnd("Started in");
-    client.user.setActivity(`Starting up...`, { type: "WATCHING", });
+  debug.sendInfo(`Successfully logged in as ${client.user.tag} at ${utils.curTime()}`);
+  debug.timeEnd("Started in");
+  client.user.setActivity(`Starting up...`, { type: "WATCHING", });
 
-    debug.sendInfo('Updated bot avtivity', 0);
-    utils.discordLoggedIn();
-    utils.updateActivity(client, config.prefixes);
+  debug.sendInfo('Updated bot avtivity', 0);
+  utils.discordLoggedIn();
+  utils.updateActivity(client, config.prefixes);
 });
 
 client.on("error", (e) => debug.sendErr('Discord Error:', e));
 client.on("warn", (e) => debug.sendWarn(e));
-/* client.on("debug", (e) => debug.sendInfo(e, 0)); */
+client.on("debug", (e) => debug.sendInfo(e, -1));
 
 // Load fonts and db and login in to the Discord API
 try {
-    utils.errorListerners(client);
-    utils.loadFonts();
-    debug.time("Initialized firebase in");
-    utils.initFirebase().then(() => {
-        debug.timeEnd("Initialized firebase in");
-        debug.time("Started in");
-        debug.sendInfo('Registering commands', 0);
-        handler.registerCommands(client);
-        debug.sendInfo('Registering events', 0);
-        handler.registerEvents(client);
-        debug.sendInfo('Logging in', 0);
-        client.login(process.env.TOKEN).then(() => {
-            api.init();
-        }).catch((err) => { utils.discordException(client, err) });
-    });
+  debug.setLevel(0);
+
+  utils.errorListerners(client);
+  utils.loadFonts();
+  debug.time("Initialized firebase in");
+  utils.initFirebase().then(() => {
+    debug.timeEnd("Initialized firebase in");
+    debug.time("Started in");
+
+    debug.sendInfo('Registering commands', 0);
+    handler.registerCommands(client);
+
+    debug.sendInfo('Registering events', 0);
+    handler.registerEvents(client);
+
+    debug.sendInfo('Logging in', 0);
+    client.login(process.env.TOKEN).then(() => {
+      api.init();
+    }).catch((err) => { utils.discordException(client, err) });
+  });
 } catch (err) { debug.sendErr(`Something went wrong trying to log in.`, err, true); }
 
 Array.prototype.hasDupes = function() {
-    return (new Set(this)).size !== this.length;
+  return (new Set(this)).size !== this.length;
 }
