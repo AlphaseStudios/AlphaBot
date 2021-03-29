@@ -51,7 +51,7 @@ client.on('ready', () => {
     utils.updateActivity(client, config.prefixes);
 });
 
-client.on("error", (e) => debug.sendErr(e));
+client.on("error", (e) => debug.sendErr('Discord Error:', e));
 client.on("warn", (e) => debug.sendWarn(e));
 /* client.on("debug", (e) => debug.sendInfo(e, 0)); */
 
@@ -72,7 +72,7 @@ try {
             api.init();
         }).catch((err) => { utils.discordException(client, err) });
     });
-} catch (err) { debug.sendErr(`Something went wrong trying to log in.\n${err}`); }
+} catch (err) { debug.sendErr(`Something went wrong trying to log in.`, err, true); }
 
 Array.prototype.hasDupes = function() {
     return (new Set(this)).size !== this.length;

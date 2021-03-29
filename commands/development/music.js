@@ -58,7 +58,7 @@ module.exports = {
                     queueContruct.connection = connection;
                     play(message.guild, queueContruct.songs[0]);
                 } catch (err) {
-                    debug.sendErr(err);
+                    debug.sendErr('Error in music', err);
                     queue.delete(message.guild.id);
                     return message.channel.send(err);
                 }
@@ -82,7 +82,7 @@ module.exports = {
                     serverQueue.songs.shift();
                     play(guild, serverQueue.songs[0]);
                 })
-                .on("error", error => debug.sendErr(error));
+                .on("error", error => debug.sendErr('Error in music.', error));
             dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
             serverQueue.textChannel.send(`Start playing: **${song.title}**`);
         }

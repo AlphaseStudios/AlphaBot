@@ -63,10 +63,10 @@ function discordException(client, err, message = null, command = null) {
         if (loggedIn) {
             client.users.fetch(dev)
                 .then(userObj => userObj.send(devEmbed))
-                .catch(err => { debug.sendErr(err) });
+                .catch(err => { debug.sendErr('Failed trying to fetch a dev', err) });
         }
 
-        debug.sendErr(err);
+        debug.sendErr('Command error.', err);
     }
 }
 

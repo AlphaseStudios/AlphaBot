@@ -8,6 +8,6 @@ module.exports = {
             .then(invite => {
                 message.channel.send(`Heres a invite link to this server: ${invite.url}.`)
             })
-            .catch(debug.sendErr);
+            .catch((err) => {debug.sendErr('Error in geninvite.js', err)});
     },
 };

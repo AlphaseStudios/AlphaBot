@@ -122,7 +122,7 @@ function register(client, type) {
                 const item = require(`./${type}/${sub}`);
                 handleItem(item);
             } catch (err) {
-                debug.sendErr(`Error while registering ${type.slice(0, -1)} ${sub}:\n${err}`)
+                debug.sendErr(`Error while registering ${type.slice(0, -1)} ${sub}`, err, true)
             }
         } else {
             let files = fs.readdirSync(`./${type}/${sub}`).filter(file => file.endsWith('.js'));
@@ -131,7 +131,7 @@ function register(client, type) {
                     const item = require(`./${type}/${sub}/${file}`);
                     handleItem(item);
                 } catch (err) {
-                    debug.sendErr(`Something went wrong... shutting down!\n${err.stack}`);
+                    debug.sendErr(`Something went wrong... shutting down!`, err, true);
                 }
             }
         }
