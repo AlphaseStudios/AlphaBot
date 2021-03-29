@@ -57,7 +57,7 @@ client.on("debug", (e) => debug.sendInfo(e, -1));
 
 // Load fonts and db and login in to the Discord API
 try {
-  debug.setLevel(0);
+  debug.setLevel(-1);
 
   utils.errorListerners(client);
   utils.loadFonts();
