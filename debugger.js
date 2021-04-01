@@ -1,7 +1,12 @@
-const fsp = require('fs').promises;
-const fs = require('fs');
+const fsp = require("fs").promises;
+const fs = require("fs");
+const readline = require("readline");
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
 
-var logPath = './logs/';
+var logPath = "./logs/";
 var debug = true;
 var defaultLevel = 0;
 
@@ -13,61 +18,80 @@ var defaultLevel = 0;
   3 - Error
 */
 function setLevel(level) {
-  if (typeof level != 'number') { debug.sendWarn(`Level has to be type of 'number' not '${typeof level}'!`); return; }
+  if (typeof level != "number") {
+    debug.sendWarn(`Level has to be type of 'number' not '${typeof level}'!`);
+    return;
+  }
 
   defaultLevel = level;
 }
 
-function sendInfo(message, level = 0) { send(message, level, 'INFO', '\u001b[33;1m'); }
-function sendWarn(message) { send(message, 2, 'WARNING', '\u001b[38;5;166m'); }
+function sendInfo(message, level = 0) {
+  send(message, level, "INFO", "\u001b[33;1m");
+}
+function sendWarn(message) {
+  send(message, 2, "WARNING", "\u001b[38;5;166m");
+}
 function sendErr(message, err, exit = false, post = true) {
   try {
     err = err.stack;
   } catch {}
 
   let ts = Date.now();
-  send(`${message} A complete log of this run can be found here: logs/log_${ts}.txt`, 3, 'ERROR', '\u001b[31;1m');
-  if(post) send(`Stack: ${err}`);
-  
-  postLog(err, ts).then(() => {
-    exit ? process.exit() : null;
-  }).catch((err) => {
-    console.log('Something just went horribly wrong: ', err)
-  });
+  send(
+    `${message} A complete log of this run can be found here: logs/log_${ts}.txt`,
+    3,
+    "ERROR",
+    "\u001b[31;1m"
+  );
+  if (post) send(`Stack: ${err}`);
+
+  postLog(err, ts)
+    .then(() => {
+      exit ? process.exit() : null;
+    })
+    .catch((err) => {
+      console.log("Something just went horribly wrong: ", err);
+    });
 }
 
 var timers = [];
 function time(label) {
-  timers.push({ label: label, timestamp: Date.now() })
+  timers.push({ label: label, timestamp: Date.now() });
 }
 
 function timeEnd(label) {
   for (i in timers) {
-    if (timers[i]['label'] == label) {
-      let calc = Date.now() - timers[i]['timestamp'];
-      let e = 'ms'
-      if (calc > 999) { calc = calc / 1000; e = 's' }
+    if (timers[i]["label"] == label) {
+      let calc = Date.now() - timers[i]["timestamp"];
+      let e = "ms";
+      if (calc > 999) {
+        calc = calc / 1000;
+        e = "s";
+      }
 
       if (label == null) label = "";
       else label = `${label}: `;
 
-      send(`${label}${calc}${e}`, null, 'TIMER', '\u001b[36;1m')
-      timers.pop(i)
+      send(`${label}${calc}${e}`, null, "TIMER", "\u001b[36;1m");
+      timers.pop(i);
       return;
     }
   }
 
-  send('No timer found.', null, 'TIMER', '\u001b[36;1m')
+  send("No timer found.", null, "TIMER", "\u001b[36;1m");
 }
 
 var logs = [];
 function send(message, level = null, type, color) {
-  if (typeof level != 'number') level = 1;
+  if (typeof level != "number") level = 1;
   try {
     message = message.toString();
   } catch (err) {
     ts = Date.now();
-    console.log(`[ERROR] Debugger failed at converting the message argument of type '${typeof message}' to type 'string'. A complete log can be found here: 'logs/log_${ts}.txt'`);
+    console.log(
+      `[ERROR] Debugger failed at converting the message argument of type '${typeof message}' to type 'string'. A complete log can be found here: 'logs/log_${ts}.txt'`
+    );
     postLog(err.stack, ts).then(() => {
       process.exit();
     });
@@ -83,7 +107,7 @@ function send(message, level = null, type, color) {
 }
 
 function collectLog() {
-  let log = '';
+  let log = "";
   for (item of logs) {
     log += `${item}\n`;
   }
@@ -91,32 +115,56 @@ function collectLog() {
 }
 
 async function postLog(log, ts = null) {
-  if (typeof ts != 'number') ts = Date.now();
-  try { log = log.toString(); }
-  catch (err) { console.log(`[ERROR] Debugger failed at converting the data argument of type '${typeof message}' to type 'string'.`); return; }
+  if (typeof ts != "number") ts = Date.now();
+  try {
+    log = log.toString();
+  } catch (err) {
+    console.log(
+      `[ERROR] Debugger failed at converting the data argument of type '${typeof message}' to type 'string'.`
+    );
+    return;
+  }
 
   let date = new Date(ts);
   let formatDate = `${date.getMonth()}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-  log = `${formatDate}\n---------------- LOG ----------------\n${collectLog()}---------------- ERROR ----------------\n${log == '0' ? 'No traceback parsed.' : log}`;
+  log = `${formatDate}\n---------------- LOG ----------------\n${collectLog()}---------------- ERROR ----------------\n${
+    log == "0" ? "No traceback parsed." : log
+  }`;
 
   return fsp.writeFile(`${logPath}log_${ts}.txt`, log);
 }
 
-module.exports = { debug, setLevel, sendInfo, sendWarn, sendErr, time, timeEnd, postLog };
+module.exports = {
+  debug,
+  setLevel,
+  sendInfo,
+  sendWarn,
+  sendErr,
+  time,
+  timeEnd,
+  postLog,
+};
 
 if (process.argv[2] != null) {
   switch (process.argv[2]) {
-    case 'flush':
-      sendWarn('CAUTION: All logs will be flushed! If you want to proceed, please run \'npm debugger.js force-flush\'');
-      break;
-    case 'force-flush':
-      sendWarn('All logs will be flushed!');
+    case "flush":
+      sendWarn("CAUTION: All logs will be flushed!");
+      rl.question("Do you want to proceed? (Y/N)", (res) => {
+        res = res.toLowerCase();
+        if ("n" in res) {
+          console.log("Aborting...");
+          return;
+        }
+      });
+      sendWarn("All logs will be flushed!");
       fs.readdirSync(`${logPath}`).map((file) => {
         sendInfo(`Flushing file ${file}`);
         fs.unlink(`${logPath}${file}`, (err) => {
-          if (err != null) { sendWarn(err); }
-          else sendInfo(`${file} got flushed successfully.`);
+          if (err != null) {
+            sendWarn(err);
+          } else sendInfo(`${file} got flushed successfully.`);
         });
       });
+      break;
   }
 }

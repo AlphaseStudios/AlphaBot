@@ -86,6 +86,12 @@ params:
   + note: Has to be the same you provided to debug.time(...)!
   + description: Label of the timer. If none is provided, the last timer with no label will be output.
 
+## Shell commands
+All commands have to start with: `node debugger.js <command> <args>`
+
+### ´flush´
+Deletes all the logs
+
 ## Request changes?
 Please ask me (JustMe#8491 on Discord) before making any changes to this file.
 
