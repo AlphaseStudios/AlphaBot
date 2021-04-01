@@ -153,18 +153,19 @@ if (process.argv[2] != null) {
         res = res.toLowerCase();
         if ("n" in res) {
           console.log("Aborting...");
-          return;
+          break;
+        } else {
+          sendWarn("All logs will be flushed!");
+          fs.readdirSync(`${logPath}`).map((file) => {
+            sendInfo(`Flushing file ${file}`);
+            fs.unlink(`${logPath}${file}`, (err) => {
+              if (err != null) {
+                sendWarn(err);
+              } else sendInfo(`${file} got flushed successfully.`);
+            });
+          });
         }
+        break;
       });
-      sendWarn("All logs will be flushed!");
-      fs.readdirSync(`${logPath}`).map((file) => {
-        sendInfo(`Flushing file ${file}`);
-        fs.unlink(`${logPath}${file}`, (err) => {
-          if (err != null) {
-            sendWarn(err);
-          } else sendInfo(`${file} got flushed successfully.`);
-        });
-      });
-      break;
   }
 }
