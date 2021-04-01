@@ -148,7 +148,7 @@ module.exports = {
             var authorID = message.author ? message.author.id : null;
             const entry = await message.guild.fetchAuditLogs({ type: 'MESSAGE_DELETE' }).then(audit => {
                 var a = audit.entries.first()
-                if (authorID) {
+                if (authorID && a.target) {
                     if (a.target.id == message.author.id && Date.now() - a.createdTimestamp < 20000) {
                         return a
                     } else {

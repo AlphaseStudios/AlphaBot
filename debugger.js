@@ -18,7 +18,7 @@ function setLevel(level) {
   defaultLevel = level;
 }
 
-function sendInfo(message, level = null) { send(message, level, 'INFO', '\u001b[33;1m'); }
+function sendInfo(message, level = 0) { send(message, level, 'INFO', '\u001b[33;1m'); }
 function sendWarn(message) { send(message, 2, 'WARNING', '\u001b[38;5;166m'); }
 function sendErr(message, err, exit = false) {
   let ts = Date.now();
@@ -106,13 +106,11 @@ if (process.argv[2] != null) {
       break;
     case 'force-flush':
       sendWarn('All logs will be flushed!');
-      fs.readdirSync(`./${logPath}`)
-      files.map((file) => {
+      fs.readdirSync(`${logPath}`).map((file) => {
         sendInfo(`Flushing file ${file}`);
-        fs.unlink(file, () => {
-          sendInfo(`${file} got flushed successfully.`);
-        }).catch((err) => {
-          sendError(`Something went wrong trying to flush ${logPath}${file}`, err);
+        fs.unlink(`${logPath}${file}`, (err) => {
+          if (err != null) { sendWarn(err); }
+          else sendInfo(`${file} got flushed successfully.`);
         });
       });
   }
