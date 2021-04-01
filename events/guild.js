@@ -1,3 +1,6 @@
+const firebase = require('firebase-admin')
+const db = firebase.database()
+
 module.exports = {
     registerEvents(client) {
         client.on('guildMemberAdd', member => {
