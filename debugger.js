@@ -33,18 +33,21 @@ function sendWarn(message) {
   send(message, 2, "WARNING", "\u001b[38;5;166m");
 }
 function sendErr(message, err, exit = false, post = true) {
-  try {
-    err = err.stack;
-  } catch {}
+  if (err.stack != null) err = err.stack;
 
+  let type = exit ? "FATAL" : "ERROR";
   let ts = Date.now();
   send(
     `${message} A complete log of this run can be found here: logs/log_${ts}.txt`,
     3,
-    "ERROR",
+    type,
     "\u001b[31;1m"
   );
-  if (post) send(`Stack: ${err}`);
+  try {
+    if (post) send(`Stack: ${err}`, 3, type, "\u001b[31;1m");
+  } catch {
+    console.log("Couldn't post err.stack");
+  }
 
   postLog(err, ts)
     .then(() => {
@@ -100,8 +103,11 @@ function send(message, level = null, type, color) {
 
   if (debug) {
     if (defaultLevel <= level) {
-      console.log(`${color}[${type}] ${message}\u001b[0m`);
-      logs.push(`[${type}] ${message}`);
+      let date = new Date();
+      let msgDate = `[${date.getDay()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}.${date.getSeconds()}] `;
+      let msg = `[${type}] ${message}`;
+      console.log(`${msgDate}${color}${msg}\u001b[0m`);
+      logs.push(msgDate + msg);
     }
   }
 }
@@ -129,9 +135,9 @@ async function postLog(log, ts = null) {
   let formatDate = `${date.getMonth()}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
   log = `${formatDate}\n---------------- LOG ----------------\n${collectLog()}---------------- ERROR ----------------\n${
     log == "0" ? "No traceback parsed." : log
-  }`;
+    }`;
 
-  return fsp.writeFile(`${logPath}log_${ts}.txt`, log);
+  return fsp.writeFile(`${logPath}log_${ts}.log`, log);
 }
 
 module.exports = {
@@ -145,27 +151,33 @@ module.exports = {
   postLog,
 };
 
-if (process.argv[2] != null) {
-  switch (process.argv[2]) {
-    case "flush":
-      sendWarn("CAUTION: All logs will be flushed!");
-      rl.question("Do you want to proceed? (Y/N)", (res) => {
-        res = res.toLowerCase();
-        if ("n" in res) {
-          console.log("Aborting...");
-          break;
-        } else {
-          sendWarn("All logs will be flushed!");
-          fs.readdirSync(`${logPath}`).map((file) => {
-            sendInfo(`Flushing file ${file}`);
-            fs.unlink(`${logPath}${file}`, (err) => {
-              if (err != null) {
-                sendWarn(err);
-              } else sendInfo(`${file} got flushed successfully.`);
+var main = function() {
+  if (process.argv[2] != null) {
+    switch (process.argv[2]) {
+      case "flush":
+        sendWarn("CAUTION: All logs will be flushed!");
+        rl.question("Do you want to proceed? (Y/N)", (res) => {
+          res = res.toLowerCase();
+          if ("n" in res) {
+            console.log("Aborting...");
+            return;
+          } else {
+            sendWarn("All logs will be flushed!");
+            fs.readdirSync(`${logPath}`).map((file) => {
+              sendInfo(`Flushing file ${file}`);
+              fs.unlink(`${logPath}${file}`, (err) => {
+                if (err != null) {
+                  sendWarn(err);
+                } else sendInfo(`${file} got flushed successfully.`);
+                return;
+              });
             });
-          });
-        }
-        break;
-      });
+          }
+        });
+    }
   }
+}
+
+if (require.main === module) {
+  main();
 }

@@ -1,6 +1,6 @@
 const firebase = require('firebase-admin')
 const db = firebase.database()
-
+const Discord = require('discord.js');
 module.exports = {
     registerEvents(client) {
         client.on('guildMemberAdd', member => {
