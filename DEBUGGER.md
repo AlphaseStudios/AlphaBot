@@ -52,7 +52,7 @@ params:
 
 <br>
 
-### `debug.sendErr(message, err, exit? = false)`
+### `debug.sendErr(message, err, exit? = false, post? = true)`
 Send a error message
 
 params:
@@ -63,6 +63,9 @@ params:
 * exit?: boolean
   + default: false
   + description: Should the program exit after saving the log file?
+* post?: boolean
+  + default: true
+  + description: Should the program post the error in console?
 
 <br>
 

@@ -66,7 +66,7 @@ function discordException(client, err, message = null, command = null) {
                 .catch(err => { debug.sendErr('Failed trying to fetch a dev', err) });
         }
 
-        debug.sendErr('Command error.', err);
+        debug.sendErr('DiscordException thrown.', err);
     }
 }
 

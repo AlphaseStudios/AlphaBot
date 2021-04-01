@@ -20,21 +20,20 @@ function setLevel(level) {
 
 function sendInfo(message, level = 0) { send(message, level, 'INFO', '\u001b[33;1m'); }
 function sendWarn(message) { send(message, 2, 'WARNING', '\u001b[38;5;166m'); }
-function sendErr(message, err, exit = false) {
+function sendErr(message, err, exit = false, post = true) {
   try {
     err = err.stack;
-  } catch {
-    null;
-  }
+  } catch {}
 
   let ts = Date.now();
   send(`${message} A complete log of this run can be found here: logs/log_${ts}.txt`, 3, 'ERROR', '\u001b[31;1m');
+  if(post) send(`Stack: ${err}`);
+  
   postLog(err, ts).then(() => {
     exit ? process.exit() : null;
   }).catch((err) => {
     console.log('Something just went horribly wrong: ', err)
   });
-
 }
 
 var timers = [];
