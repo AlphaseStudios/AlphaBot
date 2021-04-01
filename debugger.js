@@ -1,8 +1,9 @@
-const fs = require('fs').promises;
+const fsp = require('fs').promises;
+const fs = require('fs');
 
-var logPath = 'logs/';
+var logPath = './logs/';
 var debug = true;
-var defaultLevel = 1;
+var defaultLevel = 0;
 
 /* Levels:
  -1 - All (literally)
@@ -11,14 +12,23 @@ var defaultLevel = 1;
   2 - Warn
   3 - Error
 */
-function sendInfo(message, level = null) { send(message, level, 'INFO', '\u001b[33m'); }
+function setLevel(level) {
+  if (typeof level != 'number') { debug.sendWarn(`Level has to be type of 'number' not '${typeof level}'!`); return; }
+
+  defaultLevel = level;
+}
+
+function sendInfo(message, level = null) { send(message, level, 'INFO', '\u001b[33;1m'); }
 function sendWarn(message) { send(message, 2, 'WARNING', '\u001b[38;5;166m'); }
 function sendErr(message, err, exit = false) {
   let ts = Date.now();
+  send(`${message} A complete log of this run can be found here: logs/log_${ts}.txt`, 3, 'ERROR', '\u001b[31;1m');
   postLog(err, ts).then(() => {
     exit ? process.exit() : null;
+  }).catch((err) => {
+    console.log('Something just went horribly wrong: ', err)
   });
-  send(`${message} A complete log of this run can be found here: logs/log_${ts}.txt`, 3, 'ERROR', '\u001b[31;1m');
+
 }
 
 var timers = [];
@@ -84,7 +94,26 @@ async function postLog(log, ts = null) {
   let formatDate = `${date.getMonth()}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
   log = `${formatDate}\n---------------- LOG ----------------\n${collectLog()}---------------- ERROR ----------------\n${log == '0' ? 'No traceback parsed.' : log}`;
 
-  return fs.writeFile(`${logPath}log_${ts}.txt`, log);
+  return fsp.writeFile(`${logPath}log_${ts}.txt`, log);
 }
 
-module.exports = { debug, defaultLevel, sendInfo, sendWarn, sendErr, time, timeEnd, postLog };
+module.exports = { debug, setLevel, sendInfo, sendWarn, sendErr, time, timeEnd, postLog };
+
+if (process.argv[2] != null) {
+  switch (process.argv[2]) {
+    case 'flush':
+      sendWarn('CAUTION: All logs will be flushed! If you want to proceed, please run \'npm debugger.js force-flush\'');
+      break;
+    case 'force-flush':
+      sendWarn('All logs will be flushed!');
+      fs.readdirSync(`./${logPath}`)
+      files.map((file) => {
+        sendInfo(`Flushing file ${file}`);
+        fs.unlink(file, () => {
+          sendInfo(`${file} got flushed successfully.`);
+        }).catch((err) => {
+          sendError(`Something went wrong trying to flush ${logPath}${file}`, err);
+        });
+      });
+  }
+}
