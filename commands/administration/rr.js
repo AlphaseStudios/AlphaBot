@@ -76,7 +76,7 @@ module.exports = {
                                                         }
                                                     }
 
-                                                    if (tmp.hasDupes()) {
+                                                    if (hasDupes(tmp)) {
                                                         message.channel.send("Users can already get this role from a different or a similar emote!");
                                                         mCollectorTwo.resetTimer();
                                                     }
@@ -86,6 +86,9 @@ module.exports = {
                                                         message.channel.send("Please enter the type of the RR:\n\n1: \`Verify\` - User gets the role when reacts, and he cant react again or remove the role.\n\n2: \`Choice\` - User gets the role when reacts, user loses the role when removes reaction.")
                                                     }
 
+                                                    function hasDupes(arr) {
+                                                        return arr.some((val, i) => arr.indexOf(val) !== i);
+                                                    }
                                                 }
                                             }
                                             else {

@@ -11,31 +11,7 @@ const client = new Discord.Client({ partials: ['REACTION', 'CHANNEL', 'MESSAGE']
 client.commands = new Discord.Collection();
 
 // CommandHandler
-const nwordRegex = new RegExp(config.nwordRegex, "gi");
-const inviteRegex = new RegExp(config.inviteRegex, "gi")
 client.on('message', message => {
-	if (message.channel.type === "dm") return
-	if (!global.Servers[message.guild.id]) global.Servers[message.guild.id] = {}
-	// N-Word Detection
-	if (message.content.match(nwordRegex)) {
-		switch (global.Servers[message.guild.id].nword) {
-		case "1":
-			message.delete();
-			message.channel.send("You can't say the n-word on this server!")
-			break;
-		case "2":
-			if (message.member.bannable) message.member.ban({ reason: "You are not allowed to say the n-word here!" })
-			message.channel.send("You can't say the n-word on this server!")
-			break;
-		}
-	}
-
-	if (message.content.match(inviteRegex) && global.Servers[message.guild.id].remInvState && message.deletable) {
-		if (message.member.roles.cache.array().some(r => global.Servers[message.guild.id].allowedInvRoles.indexOf(r) >= 0) ||
-			global.Servers[message.guild.id].allowedInvChannels.includes(message.channel.id)) return
-			message.delete()
-	}
-
 	handler.handleCommand(client, message);
 });
 

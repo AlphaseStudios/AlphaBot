@@ -1,29 +1,37 @@
 const config = require('../resources/config.json');
 
 const nwordRegex = new RegExp(config.nwordRegex, "gi");
+const inviteRegex = new RegExp(config.inviteRegex, "gi")
 module.exports = {
     registerEvents(client) {
-        client.on('messageUpdate', (oldMessage, newMessage) => {
-            if (!newMessage.content || newMessage.channel.type == "dm") return
-            // N-Word Detection
-            if (newMessage.content.match(nwordRegex)) {
-                switch (global.Servers[newMessage.guild.id].nword) {
-                    case "1":
-                        newMessage.delete();
-                        break;
-                    case "2":
-                        if (newMessage.member.bannable) newMessage.member.ban({ reason: "Said the N-Word" })
-                        break;
-                }
+        client.on('message', (message) => {
+            if (message.content.match(inviteRegex) && global.Servers[message.guild.id].remInvState && message.deletable) {
+                if (message.member.roles.cache.array().some(r => global.Servers[message.guild.id].allowedInvRoles.indexOf(r) >= 0) ||
+                    global.Servers[message.guild.id].allowedInvChannels.includes(message.channel.id)) return
+                message.delete()
             }
+        }),
+            client.on('messageUpdate', (oldMessage, newMessage) => {
+                if (!newMessage.content || newMessage.channel.type == "dm") return
+                // N-Word Detection
+                if (newMessage.content.match(nwordRegex)) {
+                    switch (global.Servers[newMessage.guild.id].nword) {
+                        case "1":
+                            newMessage.delete();
+                            break;
+                        case "2":
+                            if (newMessage.member.bannable) newMessage.member.ban({ reason: "Said the N-Word" })
+                            break;
+                    }
+                }
 
-            /* if (newMessage.content.match(config.inviteRegex) && global.Servers[newMessage.guild.id].remInvState && newMessage.deletable) {
-
-                if (newMessage.member.roles.cache.array().some(r => global.Servers[newMessage.guild.id].allowedInvRoles.indexOf(r) >= 0) ||
-                    global.Servers[newMessage.guild.id].allowedInvChannels.includes(newMessage.channel.id)) return
-                newMessage.delete()
-            } */
-        })
+                /* if (newMessage.content.match(config.inviteRegex) && global.Servers[newMessage.guild.id].remInvState && newMessage.deletable) {
+    
+                    if (newMessage.member.roles.cache.array().some(r => global.Servers[newMessage.guild.id].allowedInvRoles.indexOf(r) >= 0) ||
+                        global.Servers[newMessage.guild.id].allowedInvChannels.includes(newMessage.channel.id)) return
+                    newMessage.delete()
+                } */
+            })
 
 
         //#region reactionRole

@@ -21,6 +21,12 @@ function setLevel(level) {
 function sendInfo(message, level = 0) { send(message, level, 'INFO', '\u001b[33;1m'); }
 function sendWarn(message) { send(message, 2, 'WARNING', '\u001b[38;5;166m'); }
 function sendErr(message, err, exit = false) {
+  try {
+    err = err.stack;
+  } catch {
+    null;
+  }
+
   let ts = Date.now();
   send(`${message} A complete log of this run can be found here: logs/log_${ts}.txt`, 3, 'ERROR', '\u001b[31;1m');
   postLog(err, ts).then(() => {
