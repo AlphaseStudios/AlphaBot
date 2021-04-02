@@ -1,5 +1,0 @@
-- Rewrote command handler for simple use on the backend
-- Added DM-command support
-- Added a 'help' command
-- Changed avatar
-- We are now opensource! 🎉

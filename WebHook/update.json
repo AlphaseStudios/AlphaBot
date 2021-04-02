@@ -1,7 +1,0 @@
-{
-  "version": "7.3",
-  "description": "Things we changed in v{{ update.version }}",
-  "changes": {},
-  "changelog": "./changelog.txt",
-  "useChangelog": true
-}
