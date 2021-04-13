@@ -6,7 +6,7 @@ module.exports = {
             if (!newMember.guild.me.hasPermission("VIEW_AUDIT_LOG")) return;
             const entry = await newMember.guild.fetchAuditLogs({ type: 'MEMBER_ROLE_UPDATE' || 'MEMBER_UPDATE' }).then(audit => {
                 var a = audit.entries.first()
-                if (a.target.id == newMember.id || a.target.id == oldMember.id) {
+                if ((a.target.id == newMember.id || a.target.id == oldMember.id) && Date.now() - a.createdTimestamp > 20000) {
                     return a;
                 } else {
                     return null;
