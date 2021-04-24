@@ -25,13 +25,17 @@ function setLevel(level) {
 
   defaultLevel = level;
 }
-
+/** Send a info to stdout. */
 function sendInfo(message, level = 0) {
   send(message, level, "INFO", "\u001b[33;1m");
 }
+
+/** Send a warn to stdout. */
 function sendWarn(message) {
   send(message, 2, "WARNING", "\u001b[38;5;166m");
 }
+
+/** Send an error to stdout. */
 function sendErr(message, err, exit = false, post = true) {
   if (err.stack != null) err = err.stack;
 
@@ -58,11 +62,13 @@ function sendErr(message, err, exit = false, post = true) {
     });
 }
 
+/** Start a timer. */
 var timers = [];
 function time(label) {
   timers.push({ label: label, timestamp: Date.now() });
 }
 
+/** End a timer. */
 function timeEnd(label) {
   for (i in timers) {
     if (timers[i]["label"] == label) {
@@ -135,7 +141,7 @@ async function postLog(log, ts = null) {
   let formatDate = `${date.getMonth()}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
   log = `${formatDate}\n---------------- LOG ----------------\n${collectLog()}---------------- ERROR ----------------\n${
     log == "0" ? "No traceback parsed." : log
-    }`;
+  }`;
 
   return fsp.writeFile(`${logPath}log_${ts}.log`, log);
 }
@@ -176,7 +182,7 @@ var main = function() {
         });
     }
   }
-}
+};
 
 if (require.main === module) {
   main();
