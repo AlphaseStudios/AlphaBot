@@ -158,7 +158,7 @@ var main = function() {
         sendWarn("CAUTION: All logs will be flushed!");
         rl.question("Do you want to proceed? (Y/N)", (res) => {
           res = res.toLowerCase();
-          if ("n" in res) {
+          if (res.includes("n")) {
             console.log("Aborting...");
             return;
           } else {
@@ -169,9 +169,11 @@ var main = function() {
                 if (err != null) {
                   sendWarn(err);
                 } else sendInfo(`${file} got flushed successfully.`);
-                return;
               });
             });
+            sendInfo('Done.');
+              process.exit();
+              return;
           }
         });
     }
