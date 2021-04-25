@@ -57,7 +57,7 @@ try {
 
     debug.sendInfo("Logging in", 0);
     client
-      .login(process.env.BETA_TOKEN)
+      .login(process.env.TOKEN)
       .then(() => {
         debug.sendInfo("Initializing API");
         api.init();
