@@ -29,7 +29,7 @@ client.on("ready", () => {
   debug.timeEnd("Started in");
   client.user.setActivity(`Starting up...`, { type: "WATCHING" });
 
-  debug.sendInfo("Updated bot avtivity", 0);
+  debug.sendInfo("Updated bot activity", 0);
   utils.discordLoggedIn();
   utils.updateActivity(client, config.prefixes);
 });
@@ -42,7 +42,7 @@ client.on("debug", (e) => debug.sendInfo(e, -1));
 try {
   debug.setLevel(0); // Default debugger level
 
-  utils.errorListerners(client);
+  utils.errorListeners(client);
   utils.loadFonts();
   debug.time("Initialized firebase in");
   utils.initFirebase().then(() => {
@@ -57,7 +57,7 @@ try {
 
     debug.sendInfo("Logging in", 0);
     client
-      .login(process.env.TOKEN)
+      .login(process.env.BETA_TOKEN)
       .then(() => {
         debug.sendInfo("Initializing API");
         api.init();
@@ -69,7 +69,3 @@ try {
 } catch (err) {
   debug.sendErr(`Something went wrong trying to log in.`, err, true);
 }
-
-Array.prototype.hasDupes = function() {
-  return new Set(this).size !== this.length;
-};

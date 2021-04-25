@@ -26,7 +26,7 @@ async function initFirebase() {
     });
 }
 
-function errorListerners(client) {
+function errorListeners(client) {
     process.on('uncaughtException', (err, origin) => {
         discordException(client, err)
     });
@@ -120,4 +120,4 @@ function addStats(name) {
 
 function getDevs() { return devs; }
 
-module.exports = { discordLoggedIn, curTime, loadFonts, initFirebase, errorListerners, discordException, updateActivity, addStats, getDevs }
+module.exports = { discordLoggedIn, curTime, loadFonts, initFirebase, errorListeners, discordException, updateActivity, addStats, getDevs }
