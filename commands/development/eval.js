@@ -4,6 +4,7 @@ module.exports = {
   devOnly: true,
   args: -1,
   async execute(client, message, args) {
+    
     await message.react("⏳");
     await message.channel.send(`\`\`\`txt\n${eval(args.join(" "))}\n\`\`\``);
     await message.react("✅");
