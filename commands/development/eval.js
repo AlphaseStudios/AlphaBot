@@ -58,19 +58,3 @@ module.exports = {
     message.reactions.cache.get("⏳").users.remove(client.user);
   },
 };
-
-function capitalize(msg) {
-  return msg.charAt(0).toUpperCase() + msg.slice(1, msg.length);
-}
-function addExc(msg) {
-  return msg += "!";
-}
-function combine(arg0, arg1) {
-  return arg0 + " " + arg1;
-}
-
-let out = capitalize("hello world");
-out = addExc(out);
-out = out.split(" ");
-out = combine(out[0], capitalize(out[1]))
-debug.sendInfo(out)
