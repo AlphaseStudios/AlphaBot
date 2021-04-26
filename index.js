@@ -5,6 +5,7 @@ const utils = require("./utils.js");
 const debug = require("./debugger.js");
 var config = require("./resources/config.json");
 const api = require("./api");
+const { args } = require("./commands/development/imagemanipulation.js");
 require("dotenv").config();
 
 const client = new Discord.Client({
@@ -31,7 +32,7 @@ client.on("ready", () => {
 
   debug.sendInfo("Updated bot activity", 0);
   utils.discordLoggedIn();
-  utils.updateActivity(client, config.prefixes);
+  utils.updateActivity(client, utils.getPrefixes());
 });
 
 client.on("error", (e) => debug.sendErr("Discord Error:", e));
@@ -42,6 +43,25 @@ client.on("debug", (e) => debug.sendInfo(e, -1));
 try {
   debug.setLevel(0); // Default debugger level
 
+  // Setting debug log level
+  [process.argv[2], process.argv[3]].map((arg) => {
+    if (arg.toLowerCase().includes("level=")) {
+      arg = arg.slice(6, arg.length);
+      arg = parseInt(arg);
+      debug.setLevel(Math.max(-1, Math.min(arg, 3)));
+      debug.sendWarn("The given argument level requires a number!");
+    }
+  });
+
+  // Handling beta version
+  let token = process.env.TOKEN;
+  if (process.argv[2].includes("beta")) {
+    token = process.env.BETA_TOKEN;
+    utils.setProduction(false);
+    debug.sendWarn("You are currently using the beta version!");
+  }
+
+  // Running bot
   utils.errorListeners(client);
   utils.loadFonts();
   debug.time("Initialized firebase in");
@@ -55,9 +75,12 @@ try {
     debug.sendInfo("Registering events", 0);
     handler.registerEvents(client);
 
-    debug.sendInfo("Logging in", 0);
+    debug.sendInfo(
+      `Logging in (${utils.isProduction() ? "production" : "beta"})`,
+      0
+    );
     client
-      .login(process.env.TOKEN)
+      .login(token)
       .then(() => {
         debug.sendInfo("Initializing API");
         api.init();

@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 const config = require('../../resources/config.json');
+const utils = require('../../utils.js');
 
 module.exports = {
     name: 'help',
@@ -33,12 +34,12 @@ module.exports = {
             if (!command.devOnly) {
                 if (command.usage == null) command.usage = "";
                 if (args.length == 0) {
-                    embed.addField(`**${config.prefixes[0]}${command.name}**`, `\`\`\`txt\n${command.description}\`\`\``, true);
+                    embed.addField(`**${utils.getPrefixes()[0]}${command.name}**`, `\`\`\`txt\n${command.description}\`\`\``, true);
                 } else {
                     if (command.aliases == null) command.aliases = [];
                     if (args[0].toLowerCase() == command.name || command.aliases.includes(args[0].toLowerCase())) {
                         if (command.aliases == null) command.aliases = ["none"];
-                        embed.addField("Name", `\`\`\`txt\n${config.prefixes[0]}${command.name} ${command.usage}\`\`\``, true)
+                        embed.addField("Name", `\`\`\`txt\n${utils.getPrefixes[0]}${command.name} ${command.usage}\`\`\``, true)
                             .addField("Description", `\`\`\`txt\n${command.description}\`\`\``)
                             .addField("Aliases", `\`\`\`txt\n${command.aliases.join(', ')}\`\`\``, true)
                             .addField("DMable", `\`\`\`txt\n${!command.guildOnly ? 'yes' : 'no'}\`\`\``, true);

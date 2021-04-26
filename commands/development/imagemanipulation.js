@@ -100,12 +100,6 @@ module.exports = {
       return ctx.font;
     };
 
-    [ 'black', 'bold', 'light', 'medium', 'regular', 'thin' ].map((item) => {
-      family = `Roboto ${text = item.charAt(0).toUpperCase() + item.substring(1,text.length())}`;
-      registerFont(`./resources/fonts/roboto-${item}.ttf`, { family: family });
-      console.log(family);
-    });
-
     const canvas = Canvas.createCanvas(700, 250);
     const ctx = canvas.getContext("2d");
 

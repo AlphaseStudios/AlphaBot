@@ -16,7 +16,7 @@ function handleCommand(client, message) {
     }
   }
 
-  for (prefix of config.prefixes) {
+  for (prefix of utils.getPrefixes()) {
     if (message.content.toLowerCase().startsWith(prefix) && !message.author.bot)
       handle();
   }
