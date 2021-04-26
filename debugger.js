@@ -27,12 +27,12 @@ function setLevel(level) {
 }
 /** Send a info to stdout. */
 function sendInfo(message, level = 0) {
-  send(message, level, "INFO", "\u001b[33;1m");
+  return send(message, level, "INFO", "\u001b[33;1m");
 }
 
 /** Send a warn to stdout. */
 function sendWarn(message) {
-  send(message, 2, "WARNING", "\u001b[38;5;166m");
+  return send(message, 2, "WARNING", "\u001b[38;5;166m");
 }
 
 /** Send an error to stdout. */
@@ -82,13 +82,12 @@ function timeEnd(label) {
       if (label == null) label = "";
       else label = `${label}: `;
 
-      send(`${label}${calc}${e}`, null, "TIMER", "\u001b[36;1m");
       timers.pop(i);
-      return;
+      return send(`${label}${calc}${e}`, null, "TIMER", "\u001b[36;1m");
     }
   }
 
-  send("No timer found.", null, "TIMER", "\u001b[36;1m");
+  return send("No timer found.", null, "TIMER", "\u001b[36;1m");
 }
 
 var logs = [];
@@ -114,6 +113,8 @@ function send(message, level = null, type, color) {
       let msg = `[${type}] ${message}`;
       console.log(`${msgDate}${color}${msg}\u001b[0m`);
       logs.push(msgDate + msg);
+
+      return `${msgDate}${msg}`;
     }
   }
 }
@@ -141,7 +142,7 @@ async function postLog(log, ts = null) {
   let formatDate = `${date.getMonth()}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
   log = `${formatDate}\n---------------- LOG ----------------\n${collectLog()}---------------- ERROR ----------------\n${
     log == "0" ? "No traceback parsed." : log
-  }`;
+    }`;
 
   return fsp.writeFile(`${logPath}log_${ts}.log`, log);
 }
@@ -178,8 +179,8 @@ var main = function() {
               });
             });
             sendInfo('Done.');
-              process.exit();
-              return;
+            process.exit();
+            return;
           }
         });
     }

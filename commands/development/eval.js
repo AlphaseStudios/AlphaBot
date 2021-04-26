@@ -1,5 +1,5 @@
 const debug = require("../../debugger.js");
-
+const Discord = require("discord.js")
 module.exports = {
   name: "eval",
   description: "Eval a line of code.",
@@ -16,19 +16,22 @@ module.exports = {
     if (found != null) code = found[1];
 
     try {
-      console.normalLog = console.log;
-      console.log = function(msg) {
-        console.normalLog(msg);
-        return msg;
-      };
+      if(code.includes("console.log")) {
+        embed = new Discord.MessageEmbed()
+            .setColor('#FF0000')
+            .setTitle(':gear: Help')
+            .setDescription('Note: `<...>` is a required argument and `[...]` is a optional argument.\nWant to get to the old docs? Click [here](https://51devs.xyz/bot/docs/)')
+            .setTimestamp()
+            .setFooter(`Executed by ${message.author.username}`, 
+        message.channel.send(embed=embed)
+      }
       res = eval(code);
-      console.log = console.normalLog;
     } catch (err) {
       res = `Error while executing eval:\n${err.stack}`;
       type = "cs";
     }
 
-    await message.channel.send(`\`\`\`${type}\n${res}\n\`\`\``);
+    await message.channel.send(`Console output:\n\`\`\`${type}\n${res}\n\`\`\``);
     await message.react("✅");
     message.reactions.cache.get("⏳").users.remove(client.user);
   },
