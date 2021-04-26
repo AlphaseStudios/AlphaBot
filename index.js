@@ -3,9 +3,7 @@ const Discord = require("discord.js");
 const handler = require("./handler.js");
 const utils = require("./utils.js");
 const debug = require("./debugger.js");
-var config = require("./resources/config.json");
 const api = require("./api");
-const { args } = require("./commands/development/imagemanipulation.js");
 require("dotenv").config();
 
 const client = new Discord.Client({
@@ -45,17 +43,19 @@ try {
 
   // Setting debug log level
   [process.argv[2], process.argv[3]].map((arg) => {
-    if (arg.toLowerCase().includes("level=")) {
-      arg = arg.slice(6, arg.length);
-      arg = parseInt(arg);
-      debug.setLevel(Math.max(-1, Math.min(arg, 3)));
-      debug.sendWarn("The given argument level requires a number!");
+    if (arg != null) {
+      if (arg.toLowerCase().includes("level=")) {
+        arg = arg.slice(6, arg.length);
+        arg = parseInt(arg);
+        debug.setLevel(Math.max(-1, Math.min(arg, 3)));
+        debug.sendWarn("The given argument level requires a number!");
+      }
     }
   });
 
   // Handling beta version
   let token = process.env.TOKEN;
-  if (process.argv[2].includes("beta")) {
+  if (process.argv[2] != null && process.argv[2].includes("beta")) {
     token = process.env.BETA_TOKEN;
     utils.setProduction(false);
     debug.sendWarn("You are currently using the beta version!");
