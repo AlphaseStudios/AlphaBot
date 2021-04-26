@@ -153,6 +153,7 @@ module.exports = {
   sendInfo,
   sendWarn,
   sendErr,
+  send,
   time,
   timeEnd,
   postLog,

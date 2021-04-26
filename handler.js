@@ -1,7 +1,6 @@
 const fs = require("fs");
 const Discord = require("discord.js");
 const utils = require("./utils.js");
-const config = require("./resources/config.json");
 const debug = require("./debugger.js");
 const cooldowns = new Discord.Collection();
 
