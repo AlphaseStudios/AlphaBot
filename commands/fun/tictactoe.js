@@ -4,7 +4,7 @@ const utils = require('../../utils.js')
 module.exports = {
     name: 'ttt',
     aliases: ['tictactoe'],
-    description: 'Tic tac toe - retard.',
+    description: 'tic tac toe',
     guildOnly: true,
     stats: true,
     execute(client, message, args) {
