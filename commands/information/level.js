@@ -59,7 +59,7 @@ module.exports = {
         warns: [],
         roles: [],
       };
-    // Check if user has an avatar, if yes set path to it, if no, use the default gray avvy.
+
     var path = target.user.displayAvatarURL({
       format: "png",
       size: 128,

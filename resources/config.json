@@ -1,6 +1,7 @@
 {
     "prefixes": [
-        "ab."
+        "a.",
+        "ap."
     ],
     "version": "7.3",
     "levels": [
