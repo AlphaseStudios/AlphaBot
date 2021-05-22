@@ -1,0 +1,21 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "extra-rules"],
+  "rules": {
+    "extra-rules/no-commented-out-code": "warn",
+    "semi": ["error", "always"],
+    "quotes": ["error", "double"],
+    "indent": ["error", 2],
+    "no-new-object": "error",
+    "object-shorthand": "error",
+    "quote-props": "warn",
+    "no-var": "warn",
+    "no-array-constructor": "warn"
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ]
+}
