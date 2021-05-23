@@ -1,4 +1,4 @@
-# This branch is the latest stable version. For experimantal go to the v7 branch.
+## This branch is the latest stable version. For experimantal go to the v7 branch.
 
 
 # Alphabot
