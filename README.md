@@ -1,7 +1,12 @@
-# alphabot
-
+# Alphabot
 > A discord bot
 
+
+# Wiki explaining how to run the bot:
+
+
+
+<!-- 
 ## About
 
 This project uses [Feathers](http://feathersjs.com). An open source web framework for building modern real-time applications.
@@ -43,3 +48,4 @@ $ feathers help                           # Show all commands
 ## Help
 
 For more information on all the things you can do with Feathers visit [docs.feathersjs.com](http://docs.feathersjs.com).
+ -->
