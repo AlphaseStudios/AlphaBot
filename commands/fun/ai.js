@@ -1,5 +1,5 @@
 const utils = require('../../utils.js');
-
+const Discord = require('discord.js')
 module.exports = {
     name: 'ai',
     stats: true,

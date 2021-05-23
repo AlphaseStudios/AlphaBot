@@ -39,7 +39,7 @@ module.exports = {
                     if (command.aliases == null) command.aliases = [];
                     if (args[0].toLowerCase() == command.name || command.aliases.includes(args[0].toLowerCase())) {
                         if (command.aliases == null) command.aliases = ["none"];
-                        embed.addField("Name", `\`\`\`txt\n${utils.getPrefixes[0]}${command.name} ${command.usage}\`\`\``, true)
+                        embed.addField("Name", `\`\`\`txt\n${utils.getPrefixes()[0]}${command.name} ${command.usage}\`\`\``, true)
                             .addField("Description", `\`\`\`txt\n${command.description}\`\`\``)
                             .addField("Aliases", `\`\`\`txt\n${command.aliases.join(', ')}\`\`\``, true)
                             .addField("DMable", `\`\`\`txt\n${!command.guildOnly ? 'yes' : 'no'}\`\`\``, true);
