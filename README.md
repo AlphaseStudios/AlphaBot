@@ -1,3 +1,6 @@
+# This branch is the latest stable version. For experimantal go to the v7 branch.
+
+
 # Alphabot
 A project powered by Alphase
 
