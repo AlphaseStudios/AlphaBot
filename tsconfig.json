@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es2018",
     "module": "commonjs",
-    "rootDir": "./",
-    "outDir": "./build",
-    "esModuleInterop": true,
+    "outDir": "./lib",
+    "rootDir": "./src",
     "strict": true,
+    "esModuleInterop": true
   },
-  "compileOnSave": true
+  "exclude": [
+    "test"
+  ]
 }

@@ -2,6 +2,11 @@
   "root": true,
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint", "extra-rules"],
+  "env": {
+    "es6": true,
+    "node": true,
+    "jest": true
+  },
   "rules": {
     "extra-rules/no-commented-out-code": "warn",
     "semi": ["error", "always"],
@@ -11,7 +16,10 @@
     "object-shorthand": "error",
     "quote-props": "warn",
     "no-var": "warn",
-    "no-array-constructor": "warn"
+    "no-array-constructor": "warn",
+    "linebreak-style": ["warn", "unix"],
+    "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-explicit-any": "off"
   },
   "extends": [
     "eslint:recommended",

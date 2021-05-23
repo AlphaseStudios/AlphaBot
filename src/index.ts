@@ -16,7 +16,6 @@ client.on("message", (message: Discord.Message) => { handle(client, message); })
 function initClient () {
   db.init().then(() => {
     console.log("db init");
-    console.log(db.getDB());
 
     client.login(process.env.BOT_TOKEN_BETA);
   }).catch((err) => { throw new Error(err); });
