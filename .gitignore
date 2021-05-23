@@ -1,5 +1,7 @@
 src/resources/secrets
+src/resources/jwt_auth.sqlite
 config/local.json
+.env
 
 # Logs
 logs
