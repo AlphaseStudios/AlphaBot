@@ -1,0 +1,2 @@
+create '.env'
+insert into '.env' 'BOT_TOKEN_BETA=<token-here>'
