@@ -19,6 +19,8 @@ import channels from "./channels";
 import { HookContext as FeathersHookContext } from "@feathersjs/feathers";
 import authentication from "./authentication";
 import sequelize from "./sequelize";
+import db from "@/helpers/database";
+import { client as botClient } from "@/index";
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const app: Application = express(feathers());
@@ -51,6 +53,10 @@ app.configure(authentication);
 app.configure(services);
 // Set up event channels (see channels.ts)
 app.configure(channels);
+// Set up database
+app.set("db", db);
+// Set client to app
+app.set("client", botClient);
 
 // Configure a middleware for 404s and the error handler
 app.use(express.notFound());

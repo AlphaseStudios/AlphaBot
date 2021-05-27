@@ -70,7 +70,7 @@ export function register (client: Client, path: string, prepend = "src", ext = "
  * Handle the command
  * -
  * Handle a message, run the command
- */ 
+ */
 export function handle (client: Client, message: Discord.Message): void {
   for (const prefix of getPrefixes()) {
     if (message.content.startsWith(prefix)) {

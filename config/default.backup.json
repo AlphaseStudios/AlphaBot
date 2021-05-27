@@ -9,7 +9,6 @@
   "authentication": {
     "entity": "user",
     "service": "users",
-    "secret": "tiQDbfKMohL/mZ1IXElZkEbODQ0=",
     "authStrategies": [
       "jwt",
       "local"
@@ -26,6 +25,19 @@
     "local": {
       "usernameField": "email",
       "passwordField": "password"
+    },
+    "oauth": {
+      "redirect": "/",
+      "auth0": {
+        "key": "<auth0 oauth key>",
+        "secret": "<auth0 oauth secret>",
+        "subdomain": "<auth0 subdomain>",
+        "scope": [
+          "profile",
+          "openid",
+          "email"
+        ]
+      }
     }
   },
   "sqlite": "sqlite://src/resources/jwt_auth.sqlite"

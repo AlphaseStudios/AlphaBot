@@ -1,5 +1,7 @@
-import logger from "./logger";
-import app from "./app";
+import logger from "./api/logger";
+import app from "./api/app";
+import initClient from "@/index";
+initClient();
 
 const port = app.get("port");
 const server = app.listen(port);

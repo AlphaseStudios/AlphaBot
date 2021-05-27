@@ -1,11 +1,17 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
     "target": "es2018",
     "module": "commonjs",
     "outDir": "./lib",
     "rootDir": "./src",
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    }
   },
   "exclude": [
     "test"
